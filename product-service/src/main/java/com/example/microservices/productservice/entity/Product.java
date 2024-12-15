@@ -20,14 +20,8 @@ import java.math.BigDecimal;
 public class Product {
     @Id
     private String id;
-
-    @NotEmpty(message = "Name is required")
     private String name;
-
-    @NotNull(message = "Price is required")
-    @Positive(message = "Price must be a positive value")
     private BigDecimal price;
-
     private String description;
 
 }

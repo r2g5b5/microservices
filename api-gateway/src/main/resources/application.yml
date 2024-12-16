@@ -6,3 +6,15 @@ service:
     product: http://localhost:8080
     order: http://localhost:8081
     inventory: http://localhost:8082
+spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8181/realms/spring-microservices-security-realm
+
+logging:
+  pattern:
+    console: '%green(%d{ISO8601}) %highlight(%-5level) [%blue(%t)] %yellow(%C{1.}): %msg%n%throwable'
+  level:
+    logging.level.org.springframework.security.web.FilterChainProxy: DEBUG

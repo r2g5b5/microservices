@@ -8,3 +8,10 @@ spring:
       ddl-auto: none
 server:
   port: 8081
+
+
+logging:
+  pattern:
+    console: '%green(%d{ISO8601}) %highlight(%-5level) [%blue(%t)] %yellow(%C{1.}): %msg%n%throwable'
+  level:
+    logging.level.org.springframework.security.web.FilterChainProxy: DEBUG

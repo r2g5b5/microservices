@@ -3,3 +3,14 @@ spring:
     mongodb:
       uri: mongodb://root:password@localhost:27017/product-service?authSource=admin
       database: product-service
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+
+
+logging:
+  pattern:
+    console: '%green(%d{ISO8601}) %highlight(%-5level) [%blue(%t)] %yellow(%C{1.}): %msg%n%throwable'
+  level:
+    logging.level.org.springframework.security.web.FilterChainProxy: DEBUG

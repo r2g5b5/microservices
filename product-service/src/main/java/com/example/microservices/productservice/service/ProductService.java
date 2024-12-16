@@ -17,10 +17,8 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Slf4j
 public class ProductService {
-
     private final ProductRepo productRepo;
     private final ProductMapper productMapper;
-
 
     @Transactional(rollbackFor = Exception.class)
     public void createProduct(ProductRequestDTO request) {
@@ -29,7 +27,7 @@ public class ProductService {
         log.info("Created product: {}", product);
     }
 
-
+    @Transactional(readOnly = true)
     public List<ProductResponseDTO> getAllProducts() {
         List<Product> products = productRepo.findAll();
         return products.stream()

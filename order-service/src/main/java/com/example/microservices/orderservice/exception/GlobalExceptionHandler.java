@@ -1,5 +1,7 @@
 package com.example.microservices.orderservice.exception;
 
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -26,4 +28,19 @@ public class GlobalExceptionHandler {
                 .collect(Collectors.toList());
         return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<List<String>> handleConstraintViolationException(ConstraintViolationException ex) {
+        List<String> errors = ex.getConstraintViolations().stream()
+                .map(ConstraintViolation::getMessage)
+                .collect(Collectors.toList());
+        return ResponseEntity.badRequest().body(errors);
+    }
+
+    @ExceptionHandler(ProductOutOfStockException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public Map<String, String> handleProductOutOfStockException(ProductOutOfStockException ex) {
+        return Map.of("error", ex.getMessage());
+    }
+
 }

@@ -1,5 +1,6 @@
 package com.example.microservices.apigateway.routes;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.gateway.server.mvc.handler.GatewayRouterFunctions;
 import org.springframework.cloud.gateway.server.mvc.handler.HandlerFunctions;
 import org.springframework.context.annotation.Bean;
@@ -8,28 +9,33 @@ import org.springframework.web.servlet.function.RequestPredicates;
 import org.springframework.web.servlet.function.RouterFunction;
 import org.springframework.web.servlet.function.ServerResponse;
 
+import java.util.Map;
+
 @Configuration
 public class Routes {
 
-    @Bean
-    public RouterFunction<ServerResponse> productServiceRoute() {
-        return GatewayRouterFunctions.route("product_service")
-                .route(RequestPredicates.path("/api/product"), HandlerFunctions.http("http://localhost:8080"))
-                .build();
-    }
+    @Value("${service.urls.product}")
+    private String productServiceUrl;
+
+    @Value("${service.urls.order}")
+    private String orderServiceUrl;
+
+    @Value("${service.urls.inventory}")
+    private String inventoryServiceUrl;
 
     @Bean
-    public RouterFunction<ServerResponse> orderServiceRoute() {
-        return GatewayRouterFunctions.route("order_service")
-                .route(RequestPredicates.path("/api/order"), HandlerFunctions.http("http://localhost:8081"))
-                .build();
-    }
+    public RouterFunction<ServerResponse> apiGatewayRoutes() {
+        Map<String, String> routes = Map.of(
+                "/api/product", productServiceUrl,
+                "/api/order", orderServiceUrl,
+                "/api/inventory", inventoryServiceUrl
+        );
 
-    @Bean
-    public RouterFunction<ServerResponse> inventoryServiceRoute() {
-        return GatewayRouterFunctions.route("inventory_service")
-                .route(RequestPredicates.path("/api/inventory"), HandlerFunctions.http("http://localhost:8082"))
-                .build();
-    }
+        var gatewayBuilder = GatewayRouterFunctions.route("api_gateway");
 
+        routes.forEach((path, url) ->
+                gatewayBuilder.route(RequestPredicates.path(path), HandlerFunctions.http(url)));
+
+        return gatewayBuilder.build();
+    }
 }

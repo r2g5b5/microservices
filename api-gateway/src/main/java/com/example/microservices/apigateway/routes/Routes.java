@@ -11,6 +11,8 @@ import org.springframework.web.servlet.function.ServerResponse;
 
 import java.util.Map;
 
+import static org.springframework.cloud.gateway.server.mvc.filter.FilterFunctions.setPath;
+
 @Configuration
 public class Routes {
 
@@ -22,6 +24,7 @@ public class Routes {
 
     @Value("${service.urls.inventory}")
     private String inventoryServiceUrl;
+
 
     @Bean
     public RouterFunction<ServerResponse> apiGatewayRoutes() {
@@ -38,4 +41,23 @@ public class Routes {
 
         return gatewayBuilder.build();
     }
+
+    @Bean
+    public RouterFunction<ServerResponse> swaggerRoutes() {
+        Map<String, String> swaggerRoutes = Map.of(
+                "/aggregate/product-service/api-docs", productServiceUrl,
+                "/aggregate/order-service/api-docs", orderServiceUrl,
+                "/aggregate/inventory-service/api-docs", inventoryServiceUrl
+        );
+
+        var swaggerBuilder = GatewayRouterFunctions.route("swagger_routes");
+
+        swaggerRoutes.forEach((path, url) ->
+                swaggerBuilder.route(RequestPredicates.path(path), HandlerFunctions.http(url))
+                        .filter(setPath("/api-docs")));
+
+        return swaggerBuilder.build();
+    }
+
+
 }

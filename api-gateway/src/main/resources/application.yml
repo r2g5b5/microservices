@@ -6,12 +6,24 @@ service:
     product: http://localhost:8080
     order: http://localhost:8081
     inventory: http://localhost:8082
+
 spring:
   security:
     oauth2:
       resourceserver:
         jwt:
           issuer-uri: http://localhost:8181/realms/spring-microservices-security-realm
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+    urls[0].name: Product Service
+    urls[0].url: /aggregate/product-service/api-docs
+    urls[1].name: Order Service
+    urls[1].url: /aggregate/order-service/api-docs
+    urls[2].name: Inventory Service
+    urls[2].url: /aggregate/inventory-service/api-docs
+
 
 logging:
   pattern:

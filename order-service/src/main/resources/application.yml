@@ -13,6 +13,8 @@ spring:
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+  application:
+    name: order-service
 server:
   port: 8081
 

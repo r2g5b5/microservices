@@ -9,6 +9,8 @@ spring:
       ddl-auto: none
   flyway:
     validate-on-migrate: true
+  application:
+    name: inventory-service
 server:
   port: 8082
 

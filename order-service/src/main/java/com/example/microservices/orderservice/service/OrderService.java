@@ -4,11 +4,13 @@ import com.example.microservices.orderservice.client.InventoryClient;
 import com.example.microservices.orderservice.dto.OrderRequestDTO;
 import com.example.microservices.orderservice.dto.OrderResponseDTO;
 import com.example.microservices.orderservice.entity.Order;
+import com.example.microservices.orderservice.event.OrderPlacedEvent;
 import com.example.microservices.orderservice.exception.ProductOutOfStockException;
 import com.example.microservices.orderservice.mapper.OrderMapper;
 import com.example.microservices.orderservice.repository.OrderRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,6 +24,7 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final OrderMapper orderMapper;
     private final InventoryClient inventoryClient;
+    private final KafkaTemplate<String, OrderPlacedEvent> kafkaTemplate;
 
     @Transactional(rollbackFor = Exception.class)
     public void placeOrder(OrderRequestDTO requestDTO) {
@@ -35,6 +38,11 @@ public class OrderService {
         Order order = orderMapper.toEntity(requestDTO);
         orderRepository.save(order);
         log.info("Order placed successfully: {}", order);
+        OrderPlacedEvent orderPlacedEvent = new OrderPlacedEvent(order.getOrderNumber(), order.getSkuCode());
+        log.info("start - sending OrderPlacedEvent: {} to kafka topic order-placed", orderPlacedEvent);
+        kafkaTemplate.send("order-placed", orderPlacedEvent);
+        log.info("end - sending OrderPlacedEvent: {} to kafka topic order-placed", orderPlacedEvent);
+
     }
 
 

@@ -1,0 +1,9 @@
+{
+  "type": "record",
+  "name": "OrderPlacedEvent",
+  "namespace": "com.example.microservices.orderservice.event",
+  "fields": [
+    { "name": "orderNumber", "type": "string" },
+    { "name": "skuCode", "type": "string" }
+  ]
+}

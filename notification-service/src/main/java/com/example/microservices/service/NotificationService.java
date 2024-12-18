@@ -1,13 +1,10 @@
-package com.example.microservices.notificationservice.serviec;
+package com.example.microservices.service;
 
-import com.example.microservices.notificationservice.event.OrderPlacedEvent;
+
+import com.example.microservices.orderservice.event.OrderPlacedEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
-import org.springframework.mail.MailException;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
-import org.springframework.mail.javamail.MimeMessagePreparator;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -15,7 +12,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class NotificationService {
 
-   // private final JavaMailSender javaMailSender;
+    // private final JavaMailSender javaMailSender;
 
     @KafkaListener(topics = "order-placed")
     public void listen(OrderPlacedEvent orderPlacedEvent) {
@@ -28,9 +25,9 @@ public class NotificationService {
             messageHelper.setSubject(String.format("Your Order with OrderNumber %s is placed successfully", orderPlacedEvent.getOrderNumber()));
             messageHelper.setText(String.format("""
                             Hi %s,%s
-                            
+
                             Your order with order number %s is now placed successfully.
-                            
+
                             Best Regards
                             Spring Shop
                             """,

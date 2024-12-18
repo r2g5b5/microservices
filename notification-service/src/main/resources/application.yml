@@ -18,3 +18,27 @@ spring:
 #    password: f263829ffb03fd
 server:
   port: 8083
+
+logging:
+  pattern:
+    console: '%green(%d{ISO8601}) %highlight(%-5level) [%blue(%t)] %yellow(%C{1}): %msg%n%throwable'
+  level:
+    logging.level.org.springframework.security.web.FilterChainProxy: DEBUG
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info, metrics, prometheus
+  metrics:
+    distribution:
+      percentiles-histogram:
+        http:
+          server:
+            requests: true
+  observations:
+    key-values:
+      application: notification-service
+  tracing:
+    sampling:
+      probability: 1.0

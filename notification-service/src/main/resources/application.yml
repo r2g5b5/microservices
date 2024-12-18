@@ -11,10 +11,10 @@ spring:
         spring.deserializer.value.delegate.class: io.confluent.kafka.serializers.KafkaAvroDeserializer
         schema.registry.url: http://127.0.0.1:8085
         specific.avro.reader: true
-
 #  mail:
 #    host: sandbox.smtp.mailtrap.io
 #    port: 2525
 #    username: 5a9d8cb58ab2b4
 #    password: f263829ffb03fd
-
+server:
+  port: 8083

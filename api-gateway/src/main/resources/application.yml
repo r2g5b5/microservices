@@ -35,7 +35,7 @@ management:
   endpoints:
     web:
       exposure:
-        include: health, info, metrics, prometheus
+        include: "*"
   endpoint:
     health:
       show-details: always
@@ -43,16 +43,16 @@ management:
 
   metrics:
     distribution:
-          percentiles-histogram:
-            http:
-              server:
-                requests: true
+      percentiles-histogram:
+        http:
+          server:
+            requests: true
   observations:
     key-values:
-          application: inventory-service
+      application: inventory-service
   tracing:
     sampling:
-          probability: 1.0
+      probability: 1.0
 
 # Resilience4j Circuit Breaker Properties
 resilience4j:
